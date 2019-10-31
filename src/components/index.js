@@ -14,6 +14,10 @@ const deviceHeight = Math.round(Dimensions.get('window').height);
 const MainView = () => {
   //setting ,initialisation droneSpeed state  to the value of 10
   const [droneSpeed, setDroneSpeed] = useState(10);
+  //setting ,initialisation detectionsNumber state
+  const [detectionsNumber, setDetectionsNumber] = useState(0);
+  //setting ,initialisation boxs array state
+  const [boxs, setBoxs] = useState([]);
   //Incremanting , updadting droneSpeed state
   increaseDroneSpeed = () => {
     setDroneSpeed (droneSpeed +0.5)
@@ -28,9 +32,61 @@ const MainView = () => {
     }
   };
 
+  // creating a component of a list of detection boxs
+  function ListOfDetetectionBoxs(props) {
+      //creating a list of box detections that will be returned as a ui component
+      const content = props.boxs.map((box) =>
+        <View key={Math.random()} style={{
+          position: 'absolute',  //absolute position so that the box's position is absolute
+          borderWidth: 4,
+          borderColor: "red",
+          backgroundColor: "transparent",
+          width: 50,
+          height: 50,
+          left:box.left,
+          top:box.top
+          }}/>
+        );
+      return (
+        <View>
+          {content}
+        </View>
+      );
+    }
+    //rendering the List Of Detetection Boxs
+    renderDetections = () => {
+      // creating an erray that will later be filled by the ListOfDetetectionBoxs component
+      const detections = [];
+      // filling the detections list with a list of detections to populate the ListOfDetetectionBoxs component
+      detections.push(
+        <ListOfDetetectionBoxs key={"detect"} boxs={boxs} />
+      );
+      return detections;
+    };
+  //Filling the boxs list with static values d. Display a list of AI detections boxes
+  /*To add a new box detection set it's new Left and Top position
+  and comment Dynamic box generation
+  */
+  /*
+  const boxs = [
+    {left: 30, top:50},
+    {left: 300, top:200},
+    {left: 30, top:300},
+    {left: 233, top:553},
+    {left: valueHere, top:valueHere},
+  ];
+  */
 
+  // Populating the array of boxs depending on detectionsNumber state
+  generateRandomDetections =() => {
+      //Setting a random integer of detections with a min of 1 and a max of 50
+      setDetectionsNumber(Math.floor(Math.random() * (50 - 1) + 1) )
+      //Filling the list with random top and left position integers that does't surpace the screen size depending in the detectionsNumber
+      for(let i=0; i<detectionsNumber ;i++){
+        boxs[i] = {'left':Math.floor(Math.random() * (deviceWidth - deviceWidth/10)) + 1,'top':Math.floor(Math.random() * (1000 - 500)) + 1};
+      }
 
-
+    };
   return (
     <View >
       <StatusBar barStyle="light-content" />
@@ -52,11 +108,11 @@ const MainView = () => {
           <Button
             buttonStyle={styles.buttonStyle}
             title="Detect"
-
+            onPress= {this.generateRandomDetections}
           />
         </View>
       </ImageBackground>
-
+        {this.renderDetections()}
     </View>
   );
 };
