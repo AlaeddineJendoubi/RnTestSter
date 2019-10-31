@@ -3,7 +3,8 @@ import * as React from "react";
 import { StatusBar, View, Text, Image, ImageBackground, StyleSheet, Dimensions, Alert} from "react-native";
 //Importing Button element from react-native-elements library
 import {Button} from "react-native-elements"
-
+//Importing useState, useEffect Hook from react , to use it to set our states
+import{ useState , useEffect} from 'react';
 //Setting & importing the background image from assets folder
 import backgroundImage from "../../assets/pylon.jpg";
 //Getting the device width and height
@@ -11,13 +12,22 @@ const deviceWidth = Math.round(Dimensions.get('window').width);
 const deviceHeight = Math.round(Dimensions.get('window').height);
 
 const MainView = () => {
-increaseDroneSpeed = () => {
-
+  //setting ,initialisation droneSpeed state  to the value of 10
+  const [droneSpeed, setDroneSpeed] = useState(10);
+  //Incremanting , updadting droneSpeed state
+  increaseDroneSpeed = () => {
+    setDroneSpeed (droneSpeed +0.5)
+  };
+  //Decremanting , updadting droneSpeed state if speed is > 1
+  decreaseDroneSpeed = () => {
+    if(droneSpeed >1){
+      setDroneSpeed (droneSpeed -0.5)
+    }
+    else {
+      alert(" WARNING: Drone Will Stop ")
+    }
   };
 
-  decreaseDroneSpeed = () => {
-
-    };
 
 
 
@@ -32,7 +42,7 @@ increaseDroneSpeed = () => {
             onPress= {this.decreaseDroneSpeed}
           />
           <Text style={styles.textStyle}>
-            Speed : 10
+            Speed : {droneSpeed}
           </Text>
           <Button
             buttonStyle={styles.buttonStyle}
